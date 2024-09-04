@@ -7,6 +7,8 @@ import com.agenda.contatos.model.ContatosModel;
 
 @Repository
 public interface ContatosRepository extends JpaRepository<ContatosModel,Long>{
+
+    
     
 
 
