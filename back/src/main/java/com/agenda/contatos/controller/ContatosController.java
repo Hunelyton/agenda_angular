@@ -32,6 +32,7 @@ public class ContatosController {
     }
 
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     public ContatosModel create(@RequestBody ContatosModel contatos) {
         return contatosRepository.save(contatos);
     }

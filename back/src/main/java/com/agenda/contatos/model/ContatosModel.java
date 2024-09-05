@@ -24,7 +24,7 @@ public class ContatosModel {
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 11, unique = true)
     private String phone;
 
     @Column(nullable = true, length = 100)
