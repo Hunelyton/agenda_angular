@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,9 @@ import com.agenda.contatos.model.ContatosModel;
 import com.agenda.contatos.repository.ContatosRepository;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 
 
@@ -38,7 +41,7 @@ public class ContatosController {
     @GetMapping("/{id}")
     public ResponseEntity<ContatosModel> findById(@PathVariable Long id){
         return contatosRepository.findById(id)
-            .map(record -> ResponseEntity.ok().body(record))
+            .map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -51,6 +54,31 @@ public class ContatosController {
         return contatosRepository.save(contatos);
     }
 
+
+    @PutMapping("/{id}")
+    private ResponseEntity<ContatosModel> update(@PathVariable Long id,
+        @RequestBody ContatosModel contatos){
+        return contatosRepository.findById(id)
+        .map(recordFound -> {
+            recordFound.setNome(contatos.getNome());
+            recordFound.setTelefone(contatos.getTelefone());
+            recordFound.setEmail(contatos.getEmail());
+            ContatosModel updated = contatosRepository.save(recordFound);
+            return ResponseEntity.ok().body(updated);
+        })
+
+            .orElse(ResponseEntity.notFound().build());
+    }
     
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        return contatosRepository.findById(id)
+        .map(recordFound -> {
+            contatosRepository.deleteById(id);
+            return ResponseEntity.noContent().<Void>build();
+            
+        })
+            .orElse(ResponseEntity.notFound().build());
+    }
 
 }
